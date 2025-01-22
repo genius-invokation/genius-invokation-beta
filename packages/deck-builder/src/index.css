@@ -1,5 +1,5 @@
 .gi-tcg-deck-builder {
-  /* Apply some useful reset. See https://github.com/unocss/unocss/blob/main/packages/reset/tailwind-compat.css */
+  /* Apply some useful reset. See https://github.com/unocss/unocss/blob/main/packages-presets/reset/tailwind-compat.css */
 
   line-height: 1.5; 
   -webkit-text-size-adjust: 100%; 
@@ -9,7 +9,8 @@
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; 
   font-feature-settings: normal; 
   font-variation-settings: normal;
-  -webkit-tap-highlight-color: transparent; 
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
 
   *,
   ::before,

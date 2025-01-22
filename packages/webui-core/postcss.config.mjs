@@ -11,10 +11,11 @@
 // GNU Affero General Public License for more details.
 //
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import "./index.css";
-import "@gi-tcg/card-data-viewer/style.css";
+import UnoCSS from "@unocss/postcss";
 
-export { type DeckBuilderProps, DeckBuilder } from "./DeckBuilder";
-export { generateRandomDeck } from "./random";
+/** @type {import("postcss-load-config").Config} */
+export default {
+  plugins: [UnoCSS()],
+};

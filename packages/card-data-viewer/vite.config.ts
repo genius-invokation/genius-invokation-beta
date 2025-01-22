@@ -15,7 +15,7 @@
 
 import { resolve } from "node:path";
 import { defaultClientConditions, defineConfig, Plugin } from "vite";
-import devtools from "solid-devtools/vite";
+// import devtools from "solid-devtools/vite";
 import solid from "vite-plugin-solid";
 import nodeExternals from "rollup-plugin-node-externals";
 import dts from "vite-plugin-dts";
@@ -47,7 +47,7 @@ export default defineConfig({
   build: {
     sourcemap: true,
     lib: {
-      entry: resolve(__dirname, "src/index.ts"),
+      entry: resolve(__dirname, "src/index.tsx"),
       formats: ["es"],
       fileName: "index",
       cssFileName: "style",

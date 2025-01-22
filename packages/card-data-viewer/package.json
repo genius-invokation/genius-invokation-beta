@@ -1,29 +1,33 @@
 {
-  "name": "@gi-tcg/detail-log-viewer",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@gi-tcg/card-data-viewer",
+  "version": "0.16.4",
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "bun": "./src/index.ts",
+      "bun": "./src/index.tsx",
       "import": "./dist/index.js"
     },
     "./style.css": "./dist/style.css"
   },
   "scripts": {
+    "dev": "bunx --bun vite",
     "check": "tsc --noEmit",
-    "build": "vite build"
+    "build": "bunx --bun vite build"
   },
   "peerDependencies": {
     "solid-js": "^1.8.15"
+  },
+  "dependencies": {
+    "@gi-tcg/assets-manager": "workspace:*"
   },
   "devDependencies": {
     "@gi-tcg/core": "workspace:*",
     "@gi-tcg/typings": "workspace:*",
     "@unocss/postcss": "^65.4.2",
     "rollup-plugin-node-externals": "^7.0.1",
-    "solid-devtools": "^0.29.2",
     "unocss": "^65.4.2",
     "vite": "^6.0.11",
     "vite-plugin-dts": "^3.7.0",
