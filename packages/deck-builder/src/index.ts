@@ -14,7 +14,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import "./index.css";
-import "@gi-tcg/card-data-viewer/style.css";
 
 export { type DeckBuilderProps, DeckBuilder } from "./DeckBuilder";
 export { generateRandomDeck } from "./random";

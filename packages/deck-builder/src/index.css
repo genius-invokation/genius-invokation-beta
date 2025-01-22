@@ -1,3 +1,5 @@
+@import "@gi-tcg/card-data-viewer/style.css";
+
 .gi-tcg-deck-builder {
   /* Apply some useful reset. See https://github.com/unocss/unocss/blob/main/packages-presets/reset/tailwind-compat.css */
 
