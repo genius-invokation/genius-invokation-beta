@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-// import { defineConfig, presetUno } from "unocss";
-// import { parseColor, colorToString } from "@unocss/preset-mini/utils";
+import { defineConfig, presetUno } from "unocss";
+import { parseColor, colorToString } from "@unocss/preset-mini/utils";
 
 export default defineConfig({
   presets: [presetUno()],
