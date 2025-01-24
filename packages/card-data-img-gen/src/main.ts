@@ -27,7 +27,7 @@ if (!executablePath) {
   const { install, Browser } = await import("@puppeteer/browsers");
   const browser = process.env.CI ? Browser.CHROMEHEADLESSSHELL : Browser.CHROME;
   console.log("Installing browser...");
-  const progress = new SingleBar({}, Presets.shades_classic);
+  const progress = new SingleBar({ noTTYOutput: true }, Presets.shades_classic);
   executablePath = (
     await install({
       browser,
@@ -54,8 +54,7 @@ const cluster: Cluster<void, void> = await Cluster.launch({
       width: 480,
       height: 640,
     },
-    headless: false,
-    devtools: true,
+    // headless: false,
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
   } satisfies LaunchOptions,
 });
@@ -87,7 +86,7 @@ const tasks = [
 ];
 
 console.log("Running tasks...");
-const progress = new SingleBar({}, Presets.shades_classic);
+const progress = new SingleBar({ noTTYOutput: true }, Presets.shades_classic);
 progress.start(tasks.length, 0);
 
 cluster.on("taskerror", (err) => {
@@ -102,6 +101,8 @@ for (const task of tasks) {
   });
 }
 
-progress.stop();
 await cluster.idle();
-await cluster.close();
+progress.stop();
+// buggy
+// await cluster.close();
+process.exit();
