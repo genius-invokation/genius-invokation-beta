@@ -25,11 +25,12 @@ let executablePath = process.env.BROWSER_PATH;
 
 if (!executablePath) {
   const { install, Browser } = await import("@puppeteer/browsers");
+  const browser = process.env.CI ? Browser.CHROMEHEADLESSSHELL : Browser.CHROME;
   console.log("Installing browser...");
   const progress = new SingleBar({}, Presets.shades_classic);
   executablePath = (
     await install({
-      browser: Browser.CHROME,
+      browser,
       buildId: "132.0.6834.83",
       cacheDir: "temp",
       downloadProgressCallback: (curr, total) => {
