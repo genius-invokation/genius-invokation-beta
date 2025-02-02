@@ -34,7 +34,8 @@ import {
   PbDiceRequirementType,
   PbCardArea,
   PbRemoveCardReason,
-  PbCreateEntityArea,
+  PbEntityArea,
+  RpcResponsePayloadOf,
 } from "@gi-tcg/typings";
 import {
   CardState,
@@ -72,7 +73,7 @@ export type IoErrorHandler = (e: GiTcgIoError) => void;
 export function verifyRpcResponse<M extends RpcMethod>(
   method: M,
   response: unknown,
-): asserts response is Required<RpcResponse>[M] {
+): asserts response is RpcResponsePayloadOf<M> {
   if (typeof response !== "object" || response === null) {
     throw new Error(`Invalid response of ${method}: ${response}`);
   }
@@ -145,25 +146,25 @@ export function verifyRpcResponse<M extends RpcMethod>(
 function exposePhaseType(phase: PhaseType): PbPhaseType {
   switch (phase) {
     case "initActives":
-      return PbPhaseType.PHASE_INIT_ACTIVES;
+      return PbPhaseType.INIT_ACTIVES;
     case "initHands":
-      return PbPhaseType.PHASE_INIT_HANDS;
+      return PbPhaseType.INIT_HANDS;
     case "roll":
-      return PbPhaseType.PHASE_ROLL;
+      return PbPhaseType.ROLL;
     case "action":
-      return PbPhaseType.PHASE_ACTION;
+      return PbPhaseType.ACTION;
     case "end":
-      return PbPhaseType.PHASE_END;
+      return PbPhaseType.END;
     case "gameEnd":
-      return PbPhaseType.PHASE_GAME_END;
+      return PbPhaseType.GAME_END;
   }
 }
 function exposeCardWhere(where: "hands" | "pile"): PbCardArea {
   switch (where) {
     case "hands":
-      return PbCardArea.CARD_AREA_HAND;
+      return PbCardArea.HAND;
     case "pile":
-      return PbCardArea.CARD_AREA_PILE;
+      return PbCardArea.PILE;
   }
 }
 
@@ -182,58 +183,58 @@ export function exposeMutation(
       return null;
     case "swapCharacterPosition":
       return {
-        swapCharacterPosition: {
-          who: m.who,
-          character0Id: m.characters[0].id,
-          character0DefinitionId: m.characters[0].definition.id,
-          character1Id: m.characters[1].id,
-          character1DefinitionId: m.characters[1].definition.id,
-        }
-      }
+        $case: "swapCharacterPosition",
+        who: m.who,
+        character0Id: m.characters[0].id,
+        character0DefinitionId: m.characters[0].definition.id,
+        character1Id: m.characters[1].id,
+        character1DefinitionId: m.characters[1].definition.id,
+      };
     case "changePhase":
       const newPhase = exposePhaseType(m.newPhase);
       return {
-        changePhase: { newPhase },
+        $case: "changePhase",
+        newPhase,
       };
     case "stepRound":
-      return { stepRound: m };
+      return { $case: "stepRound" };
     case "switchTurn":
-      return { switchTurn: m };
+      return { $case: "switchTurn" };
     case "setWinner":
-      return { setWinner: m };
+      return { $case: "setWinner", winner: m.winner };
     case "transferCard": {
       const from = exposeCardWhere(m.from);
       let transferToOpp = false;
       let to: PbCardArea;
       switch (m.to) {
         case "hands": {
-          to = PbCardArea.CARD_AREA_HAND;
+          to = PbCardArea.HAND;
           break;
         }
         case "pile": {
-          to = PbCardArea.CARD_AREA_PILE;
+          to = PbCardArea.PILE;
           break;
         }
         case "oppHands": {
-          to = PbCardArea.CARD_AREA_HAND;
+          to = PbCardArea.HAND;
           transferToOpp = true;
           break;
         }
         case "oppPile": {
-          to = PbCardArea.CARD_AREA_PILE;
+          to = PbCardArea.PILE;
           transferToOpp = true;
           break;
         }
       }
+      const hidden = m.who !== who && !transferToOpp;
       return {
-        transferCard: {
-          who: m.who,
-          from,
-          to,
-          transferToOpp,
-          cardId: m.value.id,
-          cardDefinitionId: m.who === who ? m.value.definition.id : 0,
-        },
+        $case: "transferCard",
+        who: m.who,
+        from,
+        to,
+        transferToOpp,
+        targetIndex: m.targetIndex,
+        card: exposeCard(null, m.value, hidden),
       };
     }
     case "removeCard": {
@@ -243,122 +244,109 @@ export function exposeMutation(
       let reason: PbRemoveCardReason;
       switch (m.reason) {
         case "play": {
-          reason = PbRemoveCardReason.REMOVE_CARD_REASON_PLAY;
+          reason = PbRemoveCardReason.PLAY;
           break;
         }
         case "elementalTuning": {
-          reason = PbRemoveCardReason.REMOVE_CARD_REASON_ELEMENTAL_TUNING;
+          reason = PbRemoveCardReason.ELEMENTAL_TUNING;
           break;
         }
         case "overflow": {
-          reason = PbRemoveCardReason.REMOVE_CARD_REASON_HANDS_OVERFLOW;
+          reason = PbRemoveCardReason.HANDS_OVERFLOW;
           break;
         }
         case "disposed": {
-          reason = PbRemoveCardReason.REMOVE_CARD_REASON_DISPOSED;
+          reason = PbRemoveCardReason.DISPOSED;
           break;
         }
-        case "disabled": {
-          reason = PbRemoveCardReason.REMOVE_CARD_REASON_DISABLED;
+        case "playNoEffect": {
+          reason = PbRemoveCardReason.PLAY_NO_EFFECT;
           break;
         }
         case "onDrawTriggered": {
-          reason = PbRemoveCardReason.REMOVE_CARD_REASON_ON_DRAW_TRIGGERED;
+          reason = PbRemoveCardReason.ON_DRAW_TRIGGERED;
           break;
         }
       }
       return {
-        removeCard: {
-          who: m.who,
-          from,
-          reason,
-          cardId: m.oldState.id,
-          cardDefinitionId: hide ? 0 : m.oldState.definition.id,
-        },
+        $case: "removeCard",
+        who: m.who,
+        from,
+        reason,
+        card: exposeCard(null, m.oldState, hide),
       };
     }
     case "createCard": {
       const to = exposeCardWhere(m.target);
       return {
-        createCard: {
-          who: m.who,
-          cardId: m.target === "hands" ? m.value.id : 0,
-          cardDefinitionId: m.who === who ? m.value.definition.id : 0,
-          to,
-        },
+        $case: "createCard",
+        who: m.who,
+        card: exposeCard(null, m.value, m.who !== who),
+        to,
+        targetIndex: m.targetIndex,
       };
     }
     case "createCharacter": {
       return {
-        createCharacter: {
-          who: m.who,
-          characterId: m.value.id,
-          characterDefinitionId: m.value.definition.id,
-        },
+        $case: "createCharacter",
+        who: m.who,
+        character: exposeCharacter(null, m.value),
       };
     }
     case "createEntity": {
-      let where: PbCreateEntityArea =
-        PbCreateEntityArea.ENTITY_AREA_UNSPECIFIED;
+      let where: PbEntityArea = PbEntityArea.UNSPECIFIED;
       switch (m.where.type) {
         case "characters":
-          where = PbCreateEntityArea.ENTITY_AREA_CHARACTER;
+          where = PbEntityArea.CHARACTER;
           break;
         case "combatStatuses":
-          where = PbCreateEntityArea.ENTITY_AREA_COMBAT_STATUS;
+          where = PbEntityArea.COMBAT_STATUS;
           break;
         case "summons":
-          where = PbCreateEntityArea.ENTITY_AREA_SUMMON;
+          where = PbEntityArea.SUMMON;
           break;
         case "supports":
-          where = PbCreateEntityArea.ENTITY_AREA_SUPPORT;
+          where = PbEntityArea.SUPPORT;
           break;
       }
       return {
-        createEntity: {
-          who: m.where.who,
-          where,
-          entityId: m.value.id,
-          entityDefinitionId: m.value.definition.id,
-        },
+        $case: "createEntity",
+        who: m.where.who,
+        where,
+        entity: exposeEntity(null, m.value),
       };
     }
     case "removeEntity": {
       return {
-        removeEntity: {
-          entityId: m.oldState.id,
-          entityDefinitionId: m.oldState.definition.id,
-        },
+        $case: "removeEntity",
+        entity: exposeEntity(null, m.oldState as EntityState),
       };
     }
     case "modifyEntityVar": {
       return {
-        modifyEntityVar: {
-          entityId: m.state.id,
-          entityDefinitionId: m.state.definition.id,
-          variableName: m.varName,
-          variableValue: m.value,
-        },
+        $case: "modifyEntityVar",
+        entityId: m.state.id,
+        entityDefinitionId: m.state.definition.id,
+        variableName: m.varName,
+        variableValue: m.value,
       };
     }
     case "transformDefinition": {
       return {
-        transformDefinition: {
-          entityId: m.state.id,
-          newEntityDefinitionId: m.newDefinition.id,
-        },
+        $case: "transformDefinition",
+        entityId: m.state.id,
+        newEntityDefinitionId: m.newDefinition.id,
       };
     }
     case "resetDice": {
       const dice =
         m.who === who
           ? ([...m.value] as PbDiceType[])
-          : Array.from(m.value, () => PbDiceType.DICE_UNSPECIFIED);
+          : Array.from(m.value, () => PbDiceType.UNSPECIFIED);
       return {
-        resetDice: {
-          who: m.who,
-          dice,
-        },
+        $case: "resetDice",
+        who: m.who,
+        dice,
       };
     }
     default: {
@@ -368,25 +356,31 @@ export function exposeMutation(
   }
 }
 
-export function exposeEntity(state: GameState, e: EntityState): PbEntityState {
+export function exposeEntity(
+  state: GameState | null,
+  e: EntityState,
+): PbEntityState {
   let equipment: PbEquipmentType | undefined = void 0;
   if (e.definition.type === "equipment") {
     if (e.definition.tags.includes("artifact")) {
-      equipment = PbEquipmentType.EQUIPMENT_ARTIFACT;
+      equipment = PbEquipmentType.ARTIFACT;
     } else if (e.definition.tags.includes("weapon")) {
-      equipment = PbEquipmentType.EQUIPMENT_WEAPON;
+      equipment = PbEquipmentType.WEAPON;
     } else if (e.definition.tags.includes("technique")) {
-      equipment = PbEquipmentType.EQUIPMENT_TECHNIQUE;
+      equipment = PbEquipmentType.TECHNIQUE;
     } else {
-      equipment = PbEquipmentType.EQUIPMENT_OTHER;
+      equipment = PbEquipmentType.OTHER;
     }
   }
-  const descriptionDictionary = Object.fromEntries(
-    Object.entries(e.definition.descriptionDictionary).map(([k, v]) => [
-      k,
-      v(state, e.id),
-    ]),
-  );
+  const descriptionDictionary =
+    state === null
+      ? {}
+      : Object.fromEntries(
+          Object.entries(e.definition.descriptionDictionary).map(([k, v]) => [
+            k,
+            v(state, e.id),
+          ]),
+        );
   const hasUsagePerRound = USAGE_PER_ROUND_VARIABLE_NAMES.some(
     (name) => e.variables[name],
   );
@@ -415,27 +409,28 @@ function exposeDiceRequirement(
 }
 
 function exposeCard(
-  state: GameState,
+  state: GameState | null,
   c: CardState,
   hide: boolean,
 ): PbCardState {
   if (c.id === 0) {
     hide = true;
   }
-  const descriptionDictionary = hide
-    ? {}
-    : Object.fromEntries(
-        Object.entries(c.definition.descriptionDictionary).map(([k, v]) => [
-          k,
-          v(state, c.id),
-        ]),
-      );
+  const descriptionDictionary =
+    hide || state === null
+      ? {}
+      : Object.fromEntries(
+          Object.entries(c.definition.descriptionDictionary).map(([k, v]) => [
+            k,
+            v(state, c.id),
+          ]),
+        );
   const definitionCost: PbDiceRequirement[] = [];
   if (!hide) {
     definitionCost.push(...exposeDiceRequirement(costOfCard(c.definition)));
     if (c.definition.tags.includes("legend")) {
       definitionCost.push({
-        type: PbDiceRequirementType.DICE_REQ_LEGEND,
+        type: PbDiceRequirementType.LEGEND,
         count: 1,
       });
     }
@@ -449,7 +444,7 @@ function exposeCard(
 }
 
 function exposeCharacter(
-  state: GameState,
+  state: GameState | null,
   ch: CharacterState,
 ): PbCharacterState {
   return {
@@ -485,7 +480,7 @@ export function exposeState(who: 0 | 1, state: GameState): PbGameState {
       const dice =
         i === who
           ? ([...p.dice] as PbDiceType[])
-          : p.dice.map(() => PbDiceType.DICE_UNSPECIFIED);
+          : p.dice.map(() => PbDiceType.UNSPECIFIED);
       return {
         activeCharacterId: p.activeCharacterId,
         pileCard: p.pile.map((c) => exposeCard(state, c, true)),
@@ -507,9 +502,13 @@ export function exposeAction(action: ActionInfo): Action {
   switch (action.type) {
     case "useSkill": {
       return {
-        useSkill: {
-          skillId: action.skill.definition.id,
-          targetIds: action.targets.map((t) => t.id),
+        action: {
+          $case: "useSkill",
+          value: {
+            skillDefinitionId: action.skill.definition.id,
+            targetIds: action.targets.map((t) => t.id),
+            mainDamageTargetId: action.mainDamageTarget?.id,
+          },
         },
         requiredCost: exposeDiceRequirement(action.cost),
         preview: action.preview ?? [],
@@ -517,9 +516,14 @@ export function exposeAction(action: ActionInfo): Action {
     }
     case "playCard": {
       return {
-        playCard: {
-          cardId: action.skill.caller.id,
-          targetIds: action.targets.map((t) => t.id),
+        action: {
+          $case: "playCard",
+          value: {
+            cardId: action.skill.caller.id,
+            cardDefinitionId: action.skill.caller.definition.id,
+            targetIds: action.targets.map((t) => t.id),
+            willBeEffectless: action.willBeEffectless,
+          },
         },
         requiredCost: exposeDiceRequirement(action.cost),
         preview: action.preview ?? [],
@@ -527,8 +531,12 @@ export function exposeAction(action: ActionInfo): Action {
     }
     case "switchActive": {
       return {
-        switchActive: {
-          characterId: action.to.id,
+        action: {
+          $case: "switchActive",
+          value: {
+            characterId: action.to.id,
+            characterDefinitionId: action.to.definition.id,
+          },
         },
         requiredCost: exposeDiceRequirement(action.cost),
         preview: action.preview ?? [],
@@ -536,9 +544,12 @@ export function exposeAction(action: ActionInfo): Action {
     }
     case "elementalTuning": {
       return {
-        elementalTuning: {
-          removedCardId: action.card.id,
-          targetDice: action.result as PbDiceType,
+        action: {
+          $case: "elementalTuning",
+          value: {
+            removedCardId: action.card.id,
+            targetDice: action.result as PbDiceType,
+          },
         },
         requiredCost: exposeDiceRequirement(action.cost),
         preview: [],
@@ -546,7 +557,10 @@ export function exposeAction(action: ActionInfo): Action {
     }
     case "declareEnd": {
       return {
-        declareEnd: {},
+        action: {
+          $case: "declareEnd",
+          value: {},
+        },
         requiredCost: [],
         preview: [],
       };

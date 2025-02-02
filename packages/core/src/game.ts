@@ -21,8 +21,12 @@ import {
   RpcRequest,
   RpcResponse,
   DiceRequirement,
-  PbActionType,
   PbPlayerStatus,
+  RpcRequestPayloadOf,
+  RpcResponsePayloadOf,
+  createRpcRequest,
+  PbExposedMutation,
+  unFlattenOneof,
 } from "@gi-tcg/typings";
 import {
   AnyState,
@@ -287,12 +291,13 @@ export class Game {
       .map((m) => exposeMutation(who, m))
       .filter((em): em is ExposedMutation => !!em);
     const state = exposeState(who, opt.state);
-    const mutation = [...stateMutations, ...opt.exposedMutations];
-    // const newStateStr = JSON.stringify(newState);
-    // if (mutations.length > 0 || newStateStr !== this.lastNotifiedState[who]) {
+    const mutation: PbExposedMutation[] = [
+      ...stateMutations,
+      ...opt.exposedMutations,
+    ].map((m) => ({
+      mutation: unFlattenOneof<PbExposedMutation["mutation"]>(m),
+    }));
     playerIo.notify({ mutation, state });
-    // this.lastNotifiedState[who] = newStateStr;
-    // }
   }
   private notifyOne(who: 0 | 1, mutation?: ExposedMutation, state?: GameState) {
     this.notifyOneImpl(who, {
@@ -419,30 +424,29 @@ export class Game {
     let status;
     switch (method) {
       case "action":
-        status = PbPlayerStatus.PLAYER_STATUS_ACTING;
+        status = PbPlayerStatus.ACTING;
         break;
       case "chooseActive":
-        status = PbPlayerStatus.PLAYER_STATUS_CHOOSING_ACTIVE;
+        status = PbPlayerStatus.CHOOSING_ACTIVE;
         break;
       case "selectCard":
-        status = PbPlayerStatus.PLAYER_STATUS_SELECTING_CARDS;
+        status = PbPlayerStatus.SELECTING_CARDS;
         break;
       case "rerollDice":
-        status = PbPlayerStatus.PLAYER_STATUS_REROLLING;
+        status = PbPlayerStatus.REROLLING;
         break;
       case "switchHands":
-        status = PbPlayerStatus.PLAYER_STATUS_SWITCHING_HANDS;
+        status = PbPlayerStatus.SWITCHING_HANDS;
         break;
       default:
-        status = PbPlayerStatus.PLAYER_STATUS_UNSPECIFIED;
+        status = PbPlayerStatus.UNSPECIFIED;
     }
     this.mutator.notify({
       mutations: [
         {
-          playerStatusChange: {
-            who,
-            status,
-          },
+          $case: "playerStatusChange",
+          who,
+          status,
         },
       ],
     });
@@ -451,22 +455,19 @@ export class Game {
   private async rpc<M extends RpcMethod>(
     who: 0 | 1,
     method: M,
-    request: RpcRequest[M],
-  ): Promise<Required<RpcResponse>[M]> {
+    request: RpcRequestPayloadOf<M>,
+  ): Promise<RpcResponsePayloadOf<M>> {
     if (this._terminated) {
       throw new GiTcgCoreInternalError(`Game has been terminated`);
     }
     try {
       this.setPlayerStatus(who, method);
-      const resp = await this.players[who].io.rpc({ [method]: request });
-      if (!(method in resp)) {
-        throw new GiTcgIoError(
-          who,
-          `Invalid response format: expect ${method} in response`,
-        );
-      }
-      verifyRpcResponse(method, resp[method]);
-      return resp[method];
+      const resp = await this.players[who].io.rpc(
+        createRpcRequest(method, request as any),
+      );
+      const { value } = resp.response!;
+      verifyRpcResponse(method, value);
+      return value;
     } catch (e) {
       if (e instanceof Error) {
         throw new GiTcgIoError(who, e.message, { cause: e?.cause });
@@ -637,10 +638,6 @@ export class Game {
         new PlayerEventArg(this.state, who),
       );
       const actions = await this.availableActions();
-      // TODO
-      // this.notifyOne(flip(who), {
-      //   type: "oppAction",
-      // });
       const { chosenActionIndex, usedDice } = await this.rpc(who, "action", {
         action: actions.map(exposeAction),
       });
@@ -709,19 +706,6 @@ export class Game {
 
       switch (actionInfo.type) {
         case "useSkill": {
-          this.mutator.notify({
-            mutations: [
-              {
-                actionDone: {
-                  who,
-                  actionType: PbActionType.ACTION_PLAY_CARD,
-                  characterOrCardId: actionInfo.skill.caller.id,
-                  characterDefinitionId: actionInfo.skill.caller.definition.id,
-                  skillOrCardDefinitionId: actionInfo.skill.definition.id,
-                },
-              },
-            ],
-          });
           const callerArea = getEntityArea(this.state, activeCh().id);
           await this.handleEvent(
             "onBeforeUseSkill",
@@ -738,18 +722,6 @@ export class Game {
         }
         case "playCard": {
           const card = actionInfo.skill.caller;
-          this.mutator.notify({
-            mutations: [
-              {
-                actionDone: {
-                  who,
-                  actionType: PbActionType.ACTION_PLAY_CARD,
-                  characterOrCardId: card.id,
-                  skillOrCardDefinitionId: card.definition.id,
-                },
-              },
-            ],
-          });
           if (card.definition.tags.includes("legend")) {
             this.mutate({
               type: "setPlayerFlag",
@@ -765,7 +737,7 @@ export class Game {
           // 应用“禁用事件牌”效果
           if (
             player().combatStatuses.find((st) =>
-              st.definition.tags.includes("disableEvent"),
+              st.definition.tags.includes("eventEffectless"),
             ) &&
             card.definition.cardType === "event"
           ) {
@@ -774,7 +746,7 @@ export class Game {
               who,
               where: "hands",
               oldState: card,
-              reason: "disabled",
+              reason: "playNoEffect",
             });
           } else {
             this.mutate({
@@ -823,16 +795,6 @@ export class Game {
           break;
         }
         case "declareEnd": {
-          this.mutator.notify({
-            mutations: [
-              {
-                actionDone: {
-                  who,
-                  actionType: PbActionType.ACTION_DECLARE_END,
-                },
-              },
-            ],
-          });
           this.mutate({
             type: "setPlayerFlag",
             who,
@@ -975,6 +937,7 @@ export class Game {
             targets: arg.targets,
             fast: false,
             cost: skill.initiativeSkillConfig.requiredCost,
+            mainDamageTarget: null,
           };
           result.push(actionInfo);
         }
@@ -1010,6 +973,7 @@ export class Game {
             targets: arg.targets,
             cost: skillDef.initiativeSkillConfig.requiredCost,
             fast: !card.definition.tags.includes("action"),
+            willBeEffectless: false,
           };
           result.push(actionInfo);
         }
@@ -1096,11 +1060,10 @@ export class Game {
     this.mutator.notify({
       mutations: [
         {
-          switchActive: {
-            who,
-            characterId: to.id,
-            characterDefinitionId: to.definition.id,
-          },
+          $case: "switchActive",
+          who,
+          characterId: to.id,
+          characterDefinitionId: to.definition.id,
         },
       ],
     });

@@ -20,6 +20,7 @@ import {
   PreviewData,
   ReadonlyDiceRequirement,
   DiceRequirement,
+  ExposedMutation,
 } from "@gi-tcg/typings";
 import {
   AnyState,
@@ -209,6 +210,7 @@ export interface UseSkillInfo {
   readonly who: 0 | 1;
   readonly skill: InitiativeSkillInfo;
   readonly targets: AnyState[];
+  readonly mainDamageTarget: CharacterState | null;
 }
 
 export interface PlayCardInfo {
@@ -216,6 +218,7 @@ export interface PlayCardInfo {
   readonly who: 0 | 1;
   readonly skill: PlayCardSkillInfo;
   readonly targets: AnyState[];
+  readonly willBeEffectless: boolean;
 }
 
 export interface SwitchActiveInfo {

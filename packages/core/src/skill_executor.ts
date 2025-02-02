@@ -136,19 +136,26 @@ export class SkillExecutor {
     );
     const skillDef = skillInfo.definition;
 
-    const preExposedMutations: ExposedMutation[] = [];
-    if (
-      skillInfo.caller.definition.skills.find((sk) => sk.id === skillDef.id)
-    ) {
-      preExposedMutations.push({
-        triggered: {
-          entityId: skillInfo.caller.id,
-          entityDefinitionId: skillInfo.caller.definition.id,
-        },
-      });
-    }
+    // const preExposedMutations: ExposedMutation[] = [];
+    // if (
+    //   skillInfo.caller.definition.skills.find((sk) => sk.id === skillDef.id)
+    // ) {
+    //   preExposedMutations.push({
+    //     $case: "triggered",
+    //     entityId: skillInfo.caller.id,
+    //     entityDefinitionId: skillInfo.caller.definition.id,
+    //   });
+    // }
     this.mutator.notify({
-      mutations: preExposedMutations,
+      mutations: [
+        {
+          $case: "skillUsed",
+          callerId: skillInfo.caller.id,
+          callerDefinitionId: skillInfo.caller.definition.id,
+          skillDefinitionId: skillDef.id,
+          initiative: skillDef.initiativeSkillConfig !== null,
+        },
+      ],
     });
 
     const [newState, eventList] = (0, skillDef.action)(
@@ -314,14 +321,13 @@ export class SkillExecutor {
         await this.mutator.notifyAndPause({
           mutations: [
             {
-              damage: {
-                type: healInfo.type,
-                value: healInfo.value,
-                sourceId: healInfo.source.id,
-                sourceDefinitionId: healInfo.source.definition.id,
-                targetId: healInfo.target.id,
-                targetDefinitionId: healInfo.target.definition.id,
-              },
+              $case: "damage",
+              damageType: healInfo.type,
+              value: healInfo.value,
+              sourceId: healInfo.source.id,
+              sourceDefinitionId: healInfo.source.definition.id,
+              targetId: healInfo.target.id,
+              targetDefinitionId: healInfo.target.definition.id,
             },
           ],
         });
@@ -428,11 +434,10 @@ export class SkillExecutor {
         this.mutator.notify({
           mutations: [
             {
-              switchActive: {
-                who: arg.switchInfo.who,
-                characterId: arg.switchInfo.to.id,
-                characterDefinitionId: arg.switchInfo.to.definition.id,
-              },
+              $case: "switchActive",
+              who: arg.switchInfo.who,
+              characterId: arg.switchInfo.to.id,
+              characterDefinitionId: arg.switchInfo.to.definition.id,
             },
           ],
         });
@@ -575,10 +580,12 @@ export class SkillExecutor {
           plunging,
         });
         await this.finalizeSkill(skillInfo, { targets: [] });
-        await this.handleEvent([
-          "onUseSkill",
-          new UseSkillEventArg(this.state, callerArea, skillInfo),
-        ]);
+        if (!skillDef.initiativeSkillConfig.prepared) {
+          await this.handleEvent([
+            "onUseSkill",
+            new UseSkillEventArg(this.state, callerArea, skillInfo),
+          ]);
+        }
       } else if (name === "requestTriggerEndPhaseSkill") {
         using l = this.mutator.subLog(
           DetailLogType.Event,

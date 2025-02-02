@@ -1,4 +1,4 @@
-// Copyright (C) 2024-2025 Guyutongxue
+// Copyright (C) 2025 Guyutongxue
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -11,18 +11,16 @@
 // GNU Affero General Public License for more details.
 //
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import UnoCSS from "@unocss/postcss";
+import { createContext, useContext } from "solid-js";
 
-/** @type {import("postcss-load-config").Config} */
-export default {
-  plugins: [UnoCSS()],
-  // https://github.com/unocss/unocss/discussions/3444
-  postprocess: [
-    (obj) => {
-      obj.selector = ".gi-tcg-deck-builder " + obj.selector;
-    },
-  ],
+export interface UiContextValue {
+  assetsApiEndpoint?: string;
+}
 
-};
+export const UiContext = createContext<UiContextValue>({});
+
+export function useUiContext() {
+  return useContext(UiContext);
+}

@@ -11,11 +11,15 @@
 // GNU Affero General Public License for more details.
 //
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import UnoCSS from "@unocss/postcss";
+import { defineConfig, presetUno, transformerDirectives } from "unocss";
 
-/** @type {import("postcss-load-config").Config} */
-export default {
-  plugins: [UnoCSS()],
-};
+export default defineConfig({
+  presets: [presetUno()],
+  transformers: [transformerDirectives()],
+  postprocess: (obj) => {
+    const scope = `.gi-tcg-chessboard-new`;
+    obj.selector += `:where(${scope},${scope} *)`;
+  },
+});
