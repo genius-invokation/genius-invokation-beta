@@ -72,6 +72,10 @@ export function collateActionCards(langCode: string) {
       // 热斗模式
       continue;
     }
+    if (133085 <= id && id <= 133099) {
+      // 骗骗花就算了吧
+      continue;
+    }
     const type = obj.cardType;
     const [name, englishName] = [locale, english].map((lc) =>
       sanitizeName(lc[obj.nameTextMapHash] ?? ""),

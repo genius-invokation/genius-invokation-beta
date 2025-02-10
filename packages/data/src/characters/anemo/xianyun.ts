@@ -97,12 +97,12 @@ export const WordOfWindAndFlower = skill(15101)
  * @id 15102
  * @name 朝起鹤云
  * @description
- * 造成2点风元素伤害，生成步天梯，本角色附属闲云冲击波。
+ * 造成1点风元素伤害，生成步天梯，本角色附属闲云冲击波。
  */
 export const WhiteCloudsAtDawn = skill(15102)
   .type("elemental")
   .costAnemo(3)
-  .damage(DamageType.Anemo, 2)
+  .damage(DamageType.Anemo, 1)
   .combatStatus(Skyladder)
   .characterStatus(DriftcloudWave)
   .done();
