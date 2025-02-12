@@ -42,4 +42,4 @@ jobs:
           bun-version: latest
       - name: Deploy to Vercel
         run: |
-          bunx vercel deploy --token=${{ secrets.VERCEL_TOKEN }}
+          bunx vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
