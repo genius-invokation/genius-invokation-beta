@@ -141,5 +141,10 @@
   "7580404901287523604": "UI_Gcg_Debuff_Mualani_S",
   "1897174432279886145": "UI_Gcg_Buff_Vehicle_Mualani",
   "42360170292122356": "UI_Gcg_Buff_Clorinde_S",
-  "19109324153596424": "UI_Gcg_Buff_Vehicle_Flamingo"
+  "19109324153596424": "UI_Gcg_Buff_Vehicle_Flamingo",
+  "11146794463317890024": "UI_Gcg_Debuff_Arlecchino_S",
+  "8398308115074674601": "UI_Gcg_Buff_Nightsoul_Grass",
+  "3308744404490074116": "UI_Gcg_Buff_Kinich_S",
+  "4125516403550515652": "UI_Gcg_Buff_Kinich_E",
+  "6552315636754208809": "UI_Gcg_Debuff_Common_Countered01"
 }

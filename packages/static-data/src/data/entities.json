@@ -2703,6 +2703,7 @@
     "description": "我方角色受到伤害后：我方受到伤害的角色和敌方阿蕾奇诺均附属1层生命之契。\n可用次数：5",
     "shownToken": "GCG_TOKEN_LIFE",
     "hidden": false,
+    "buffIcon": "UI_Gcg_Debuff_Arlecchino_S",
     "buffIconHash": "11146794463317890024"
   },
   {
@@ -5120,6 +5121,7 @@
     "description": "敌方受到燃烧反应伤害或我方其他角色使用特技后：附属角色获得1点「夜魂值」。\n当夜魂值等于2点时：附属角色附属钩索准备，随后消耗2点「夜魂值」。（附属钩索准备后，我方角色选择行动前，若附属角色为出战角色：对最近的敌方角色造成3点草元素伤害）\n持续回合：2",
     "shownToken": "GCG_TOKEN_ROUND_COUNT",
     "hidden": false,
+    "buffIcon": "UI_Gcg_Buff_Kinich_E",
     "buffIconHash": "4125516403550515652"
   },
   {
@@ -5136,6 +5138,7 @@
     "buffType": "GCG_STATE_BUFF_DENDRO",
     "shownToken": "GCG_TOKEN_NYX_VALUE",
     "hidden": false,
+    "buffIcon": "UI_Gcg_Buff_Nightsoul_Grass",
     "buffIconHash": "8398308115074674601"
   },
   {
@@ -5162,6 +5165,7 @@
     "rawDescription": "<color=#FFFFFFFF>我方角色选择行动前，若附属角色为出战角色：</color>对最近的敌方角色造成3点$[K107]。",
     "description": "我方角色选择行动前，若附属角色为出战角色：对最近的敌方角色造成3点草元素伤害。",
     "hidden": false,
+    "buffIcon": "UI_Gcg_Buff_Kinich_S",
     "buffIconHash": "3308744404490074116"
   },
   {
@@ -10758,6 +10762,7 @@
     "description": "本回合中，所在阵营打出的事件牌无效。\n可用次数：1",
     "shownToken": "GCG_TOKEN_LIFE",
     "hidden": false,
+    "buffIcon": "UI_Gcg_Debuff_Common_Countered01",
     "buffIconHash": "6552315636754208809"
   },
   {
@@ -11579,6 +11584,7 @@
     "description": "本回合中，我方打出的事件牌无效。\n可用次数：3",
     "shownToken": "GCG_TOKEN_LIFE",
     "hidden": false,
+    "buffIcon": "UI_Gcg_Debuff_Common_Countered01",
     "buffIconHash": "6552315636754208809"
   },
   {
