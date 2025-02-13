@@ -283,6 +283,7 @@ export class SkillContext<Meta extends ContextMetaBase> {
     skill: SkillInfo,
     arg: Arg,
   ) {
+    this.mutator.notify();
     const [newState, { innerNotify, emittedEvents }] = skillDescription(
       this.state,
       skill,
