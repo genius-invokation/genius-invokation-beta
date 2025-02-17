@@ -15,6 +15,7 @@
 
 import { characters, actionCards } from "../src/index";
 import { version as packageJsonVersion } from "../package.json" with { type: "json" };
+import { BETA_VERSION } from "@gi-tcg/config";
 
 const existingVersion = Object.fromEntries(
   [...characters, ...actionCards]
@@ -23,7 +24,7 @@ const existingVersion = Object.fromEntries(
 );
 
 const giIndex = packageJsonVersion.indexOf("gi-");
-const newVersion = "v" + packageJsonVersion.substring(giIndex + 3).replace(/-/g, ".");
+const newVersion = BETA_VERSION;
 
 let newVersionChecked = false;
 function checkNewVersion() {

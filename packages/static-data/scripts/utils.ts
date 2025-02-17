@@ -54,6 +54,40 @@ export function sanitizeName(str: string) {
   return str;
 }
 
+export const P_ID = "ELKKIAIGOBK";
+export const P_NAME_TEXT_MAP_HASH = "DNINKKHEILA";
+export const P_DESC_TEXT_MAP_HASH = "PGEPICIANFN";
+export const P_CARD_TYPE = "AKFHEALPHCI";
+export const P_DESC_ON_TABLE_TEXT_MAP_HASH = "AHLAMFJMMNE";
+export const P_CHOOSE_TARGET_LIST = "FCMHILAGPOA";
+export const P_COST_LIST = "NKOGICGAMBI";
+export const P_HINT_VALUE = "EENJHDKBFAF";
+export const P_HINT_TYPE = "PKMFCKBEENF";
+export const P_TAG_LIST = "EPEEKNPFMGK";
+export const P_STATE_BUFF_TYPE = "MMBCCCMILGF";
+export const P_TOKEN_TO_SHOW = "DFHPBKMJIBG";
+export const P_BUFF_ICON_HASH = "NBKDKKNPNEA";
+export const P_SKILL_LIST = "DGEONNFHNMC";
+export const P_IS_CAN_OBTAIN = "MBOCNLEANKI";
+export const P_CARD_PREFAB_NAME = "ANCNNGJIHKC";
+export const P_STORY_TITLE_TEXT_MAP_HASH = "FEGENDBCMKK";
+export const P_STORY_DESC_TEXT_MAP_HASH = "DJCBEGGOMIP";
+export const P_RELATED_CHARACTER_ID = "ADOEIJONPDJ";
+export const P_RELATED_CHARACTER_TAG_LIST = "LLGFCLMGIMH";
+export const P_HP = "EBCHCINGOGE";
+export const P_MAX_ENERGY = "ENFPFKDCHIA";
+export const P_IS_REMOVE_AFTER_DIE = "PMGOBPHFJGB";
+export const P_SKILL_TAG_LIST = "DNJFINKGBKJ";
+export const P_SKILL_JSON = "FFKEEDIOALH";
+export const P_SKILL_ICON_HASH = "EJNFLOKAAHC";
+export const P_TITLE_TEXT_MAP_HASH = "CEDPMADOGBL";
+export const P_TARGET_CAMP = "BIEKGOMKGFH";
+export const P_TARGET_HINT_TEXT_MAP_HASH = "ABIPJAONMEF";
+export const P_XCHOOSE_ID = "AFDGJFKDNCJ";
+export const P_COST_TYPE = "GAHLFJKDMLO";
+export const P_COUNT = "HKJMLLBFLOL";
+export const P_IS_HIDDEN = "BCCEKDGHHPN";
+
 export const xcard = getExcel("GCGCardExcelConfigData");
 export const xchar = getExcel("GCGCharExcelConfigData");
 export const xskill = getExcel("GCGSkillExcelConfigData");
