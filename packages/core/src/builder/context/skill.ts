@@ -1263,21 +1263,23 @@ export class SkillContext<Meta extends ContextMetaBase> {
       }
     }
   }
-  convertDice(target: DiceType, count: number | "all") {
+  convertDice(target: DiceType, count: number | "all", where: "my" | "opp" = "my") {
+    const player = where === "my" ? this.player : this.oppPlayer;
+    const who = where === "my" ? this.callerArea.who : flip(this.callerArea.who);
     if (count === "all") {
-      count = this.player.dice.length;
+      count = player.dice.length;
     }
-    const oldDiceCount = this.player.dice.length - count;
-    const oldDice = this.player.dice.slice(0, oldDiceCount);
+    const oldDiceCount = player.dice.length - count;
+    const oldDice = player.dice.slice(0, oldDiceCount);
     const newDice = new Array<DiceType>(count).fill(target);
-    const finalDice = sortDice(this.player, [...oldDice, ...newDice]);
+    const finalDice = sortDice(player, [...oldDice, ...newDice]);
     using l = this.mutator.subLog(
       DetailLogType.Primitive,
-      `Convert ${count} dice to [dice:${target}]`,
+      `Convert ${who}'s ${count} dice to [dice:${target}]`,
     );
     this.mutate({
       type: "resetDice",
-      who: this.callerArea.who,
+      who,
       value: finalDice,
     });
   }
@@ -1795,6 +1797,7 @@ type SkillContextMutativeProps =
   | "drawCards"
   | "undrawCards"
   | "stealHandCard"
+  | "swapPlayerHandCards"
   | "setExtensionState"
   | "switchCards"
   | "reroll"
