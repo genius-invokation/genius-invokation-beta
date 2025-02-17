@@ -521,6 +521,9 @@ const detailedEventDictionary = {
   consumeNightsoulFinal: defineDescriptor("onConsumeNightsoul1", (c, e, r) => {
     return checkRelative(e.onTimeState, e.character.id, r);
   }),
+  selectCard: defineDescriptor("onSelectCard", (c, e, r) => {
+    return checkRelative(e.onTimeState, { who: e.who }, r);
+  })
 } satisfies Record<string, Descriptor<any>>;
 
 type OverrideEventArgType = {
