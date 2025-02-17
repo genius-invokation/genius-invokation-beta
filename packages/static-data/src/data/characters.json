@@ -6794,7 +6794,7 @@
         "name": "羽袖一触",
         "englishName": "Fluttering Hasode",
         "type": "GCG_SKILL_TAG_E",
-        "rawDescription": "从3个<color=#FFFFFFFF>$[C116097]</color>中挑选1个召唤。",
+        "rawDescription": "从3个<color=#FFFFFFFF>$[C116097]</color>中<color=#FFFFFFFF>$[K59]</color>1个召唤。",
         "description": "从3个千织的自动制御人形中挑选1个召唤。",
         "playCost": [
           {
@@ -6837,6 +6837,93 @@
     "maxEnergy": 2,
     "cardFace": "UI_Gcg_CardFace_Char_Avatar_Chiori",
     "icon": "UI_Gcg_Char_AvatarIcon_Chiori"
+  },
+  {
+    "id": 1610,
+    "shareId": 461,
+    "sinceVersion": "v5.4.51-beta",
+    "obtainable": true,
+    "name": "卡齐娜",
+    "englishName": "Kachina",
+    "tags": [
+      "GCG_TAG_ELEMENT_GEO",
+      "GCG_TAG_WEAPON_POLE",
+      "GCG_TAG_NATION_NATLAN"
+    ],
+    "storyTitle": "斑金矿朴·卡齐娜",
+    "storyText": "眼泪与勇气熔铸出的宝石。",
+    "skills": [
+      {
+        "id": 16101,
+        "name": "嵴之啮咬",
+        "englishName": "Cragbiter",
+        "type": "GCG_SKILL_TAG_A",
+        "rawDescription": "造成$[D__KEY__DAMAGE]点$[D__KEY__ELEMENT]。",
+        "description": "造成2点物理伤害。",
+        "playCost": [
+          {
+            "type": "GCG_COST_DICE_GEO",
+            "count": 1
+          },
+          {
+            "type": "GCG_COST_DICE_VOID",
+            "count": 2
+          }
+        ],
+        "targetList": [],
+        "keyMap": {
+          "D__KEY__DAMAGE": 2
+        },
+        "icon": "Skill_A_03"
+      },
+      {
+        "id": 16102,
+        "name": "出击，冲天转转！",
+        "englishName": "Go, Go Turbo Twirly!",
+        "type": "GCG_SKILL_TAG_E",
+        "rawDescription": "自身附属<color=#FFFFFFFF>$[C116102]</color>并进入<color=#FFFFFFFF>$[C116104]</color>。",
+        "description": "自身附属冲天转转并进入夜魂加持。",
+        "playCost": [
+          {
+            "type": "GCG_COST_DICE_GEO",
+            "count": 2
+          }
+        ],
+        "targetList": [
+          {
+            "id": 102,
+            "type": "GCG_CARD_CHARACTER",
+            "camp": "FRIENDLY",
+            "tags": [],
+            "rawHintText": "对我方出战角色生效",
+            "hintText": "对我方出战角色生效"
+          }
+        ]
+      },
+      {
+        "id": 16103,
+        "name": "现在，认真时间！",
+        "englishName": "Time to Get Serious!",
+        "type": "GCG_SKILL_TAG_Q",
+        "rawDescription": "造成$[D__KEY__DAMAGE]点$[D__KEY__ELEMENT]，生成<color=#FFFFFFFF>$[C116101]</color>。",
+        "description": "造成undefined点物理伤害，生成超级钻钻领域。",
+        "playCost": [
+          {
+            "type": "GCG_COST_DICE_GEO",
+            "count": 3
+          },
+          {
+            "type": "GCG_COST_ENERGY",
+            "count": 2
+          }
+        ],
+        "targetList": []
+      }
+    ],
+    "hp": 10,
+    "maxEnergy": 2,
+    "cardFace": "UI_Gcg_CardFace_Char_Avatar_Kachina",
+    "icon": "UI_Gcg_Char_AvatarIcon_Kachina"
   },
   {
     "id": 1701,
@@ -7627,8 +7714,8 @@
         "name": "向伟大圣龙致意",
         "englishName": "Hail to the Almighty Dragonlord",
         "type": "GCG_SKILL_TAG_Q",
-        "rawDescription": "造成$[D__KEY__DAMAGE]点$[D__KEY__ELEMENT]，生成<color=#FFFFFFFF>$[C117093]</color>。",
-        "description": "造成1点草元素伤害，生成伟大圣龙阿乔。",
+        "rawDescription": "造成$[D__KEY__DAMAGE]点$[D__KEY__ELEMENT]，召唤<color=#FFFFFFFF>$[C117093]</color>。",
+        "description": "造成1点草元素伤害，召唤伟大圣龙阿乔。",
         "playCost": [
           {
             "type": "GCG_COST_DICE_DENDRO",
@@ -7662,6 +7749,114 @@
     "maxEnergy": 2,
     "cardFace": "UI_Gcg_CardFace_Char_Avatar_Kinich",
     "icon": "UI_Gcg_Char_AvatarIcon_Kinich"
+  },
+  {
+    "id": 1710,
+    "shareId": 462,
+    "sinceVersion": "v5.4.51-beta",
+    "obtainable": true,
+    "name": "艾梅莉埃",
+    "englishName": "Emilie",
+    "tags": [
+      "GCG_TAG_ELEMENT_DENDRO",
+      "GCG_TAG_WEAPON_POLE",
+      "GCG_TAG_NATION_FONTAINE",
+      "GCG_TAG_ARKHE_OUSIA"
+    ],
+    "storyTitle": "千缕之踪·艾梅莉埃",
+    "storyText": "如香消，如雾散。",
+    "skills": [
+      {
+        "id": 17101,
+        "name": "逐影枪术·改",
+        "englishName": "Shadow-Hunting Spear (Custom)",
+        "type": "GCG_SKILL_TAG_A",
+        "rawDescription": "造成$[D__KEY__DAMAGE]点$[D__KEY__ELEMENT]。",
+        "description": "造成2点物理伤害。",
+        "playCost": [
+          {
+            "type": "GCG_COST_DICE_DENDRO",
+            "count": 1
+          },
+          {
+            "type": "GCG_COST_DICE_VOID",
+            "count": 2
+          }
+        ],
+        "targetList": [],
+        "keyMap": {
+          "D__KEY__DAMAGE": 2
+        },
+        "icon": "Skill_A_03"
+      },
+      {
+        "id": 17102,
+        "name": "撷萃调香",
+        "englishName": "Fragrance Extraction",
+        "type": "GCG_SKILL_TAG_E",
+        "rawDescription": "召唤<color=#FFFFFFFF>$[C117101]</color>。",
+        "description": "召唤柔灯之匣·一阶。",
+        "playCost": [
+          {
+            "type": "GCG_COST_DICE_DENDRO",
+            "count": 3
+          }
+        ],
+        "targetList": [
+          {
+            "id": 102,
+            "type": "GCG_CARD_CHARACTER",
+            "camp": "FRIENDLY",
+            "tags": [],
+            "rawHintText": "对我方出战角色生效",
+            "hintText": "对我方出战角色生效"
+          }
+        ]
+      },
+      {
+        "id": 17103,
+        "name": "香氛演绎",
+        "englishName": "Aromatic Explication",
+        "type": "GCG_SKILL_TAG_Q",
+        "rawDescription": "造成$[D__KEY__DAMAGE]点$[D__KEY__ELEMENT]。移除我方场上的<color=#FFFFFFFF>柔灯之匣</color>。召唤<color=#FFFFFFFF>$[C117103]</color>。",
+        "description": "造成undefined点物理伤害。移除我方场上的柔灯之匣。召唤柔灯之匣·三阶。",
+        "playCost": [
+          {
+            "type": "GCG_COST_DICE_DENDRO",
+            "count": 3
+          },
+          {
+            "type": "GCG_COST_ENERGY",
+            "count": 2
+          }
+        ],
+        "targetList": []
+      },
+      {
+        "id": 17104,
+        "name": "余薰",
+        "englishName": "Lingering Fragrance",
+        "type": "GCG_SKILL_TAG_PASSIVE",
+        "rawDescription": "<color=#FFFFFFFF>我方造成燃烧反应伤害后：</color>触发1次我方<color=#FFFFFFFF>$[C115]</color>的回合结束效果。（每回合1次）",
+        "description": "我方造成燃烧反应伤害后：触发1次我方燃烧烈焰的回合结束效果。（每回合1次）",
+        "playCost": [],
+        "targetList": []
+      },
+      {
+        "id": 17105,
+        "name": "余薰",
+        "englishName": "Lingering Fragrance",
+        "type": "GCG_SKILL_TAG_PASSIVE",
+        "rawDescription": "<color=#FFFFFFFF>我方造成燃烧反应伤害后：</color>触发1次我方<color=#FFFFFFFF>$[C115]</color>的回合结束效果。（每回合1次）",
+        "description": "我方造成燃烧反应伤害后：触发1次我方燃烧烈焰的回合结束效果。（每回合1次）",
+        "playCost": [],
+        "targetList": []
+      }
+    ],
+    "hp": 10,
+    "maxEnergy": 2,
+    "cardFace": "UI_Gcg_CardFace_Char_Avatar_Emilie",
+    "icon": "UI_Gcg_Char_AvatarIcon_Emilie"
   },
   {
     "id": 2101,
