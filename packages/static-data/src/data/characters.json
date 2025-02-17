@@ -6898,7 +6898,8 @@
             "rawHintText": "对我方出战角色生效",
             "hintText": "对我方出战角色生效"
           }
-        ]
+        ],
+        "keyMap": {}
       },
       {
         "id": 16103,
@@ -6917,7 +6918,8 @@
             "count": 2
           }
         ],
-        "targetList": []
+        "targetList": [],
+        "keyMap": {}
       }
     ],
     "hp": 10,
@@ -7811,7 +7813,8 @@
             "rawHintText": "对我方出战角色生效",
             "hintText": "对我方出战角色生效"
           }
-        ]
+        ],
+        "keyMap": {}
       },
       {
         "id": 17103,
@@ -7830,7 +7833,8 @@
             "count": 2
           }
         ],
-        "targetList": []
+        "targetList": [],
+        "keyMap": {}
       },
       {
         "id": 17104,
@@ -7840,7 +7844,8 @@
         "rawDescription": "<color=#FFFFFFFF>我方造成燃烧反应伤害后：</color>触发1次我方<color=#FFFFFFFF>$[C115]</color>的回合结束效果。（每回合1次）",
         "description": "我方造成燃烧反应伤害后：触发1次我方燃烧烈焰的回合结束效果。（每回合1次）",
         "playCost": [],
-        "targetList": []
+        "targetList": [],
+        "keyMap": {}
       },
       {
         "id": 17105,
@@ -7850,7 +7855,8 @@
         "rawDescription": "<color=#FFFFFFFF>我方造成燃烧反应伤害后：</color>触发1次我方<color=#FFFFFFFF>$[C115]</color>的回合结束效果。（每回合1次）",
         "description": "我方造成燃烧反应伤害后：触发1次我方燃烧烈焰的回合结束效果。（每回合1次）",
         "playCost": [],
-        "targetList": []
+        "targetList": [],
+        "keyMap": {}
       }
     ],
     "hp": 10,

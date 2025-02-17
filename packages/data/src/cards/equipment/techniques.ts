@@ -133,6 +133,12 @@ const SpiritOfOmenPyroScorpion = void 0; // moved to eremite_scorching_loremaste
  * 特技：藤蔓锋鳞
  * 可用次数：2
  * （角色最多装备1个「特技」）
+ * [1270321: 藤蔓锋鳞] (1*Same, 1*Energy) 造成1点草元素伤害。
+ * [2270312: ] ()
+ * @outdated
+ * 特技：藤蔓锋鳞
+ * 可用次数：2
+ * （角色最多装备1个「特技」）
  * [1270321: 藤蔓锋鳞] (1*Void, 1*Energy) 造成1点草元素伤害。
  * [2270312: ] ()
  */
@@ -271,4 +277,38 @@ export const Qucusaurus = card(313006)
   .costSame(1)
   .switchActive("my next")
   .characterStatus(Target, "opp active")
+  .done();
+
+/**
+ * @id 116102
+ * @name 冲天转转
+ * @description
+ * 附属角色切换至后台时：消耗1点夜魂值，召唤冲天转转·脱离。
+ * [1161021: 转转冲击] (1*Same) 附属角色消耗1点「夜魂值」，造成undefined点物理伤害，对敌方下一个后台角色造成1点穿透伤害。
+ * [1161022: ] ()
+ * [1161023: ] ()
+ * [1161024: ] ()
+ */
+export const TurboTwirly = card(116102)
+  .since("v5.4.51-beta")
+  .technique()
+  // TODO
+  .done();
+
+/**
+ * @id 313007
+ * @name 浪船
+ * @description
+ * 附属角色切换至后台时：此牌可用次数+1。
+ * 特技：浪船·迅击炮
+ * 可用次数：2
+ * （角色最多装备1个「特技」）
+ * [3130071: 浪船·迅击炮] (1*Same) 造成2点物理伤害。
+ * [3130072: ] () 附属角色切换至后台时，此牌可用次数+1。
+ */
+export const Waverider = card(313007)
+  .since("v5.4.51-beta")
+  .costSame(5)
+  .technique()
+  // TODO
   .done();

@@ -1934,7 +1934,8 @@
         "rawDescription": "",
         "description": "",
         "playCost": [],
-        "targetList": []
+        "targetList": [],
+        "keyMap": {}
       },
       {
         "id": 1121422,
@@ -1961,7 +1962,8 @@
         "rawDescription": "",
         "description": "",
         "playCost": [],
-        "targetList": []
+        "targetList": [],
+        "keyMap": {}
       }
     ],
     "rawDescription": "<color=#FFFFFFFF>双方切换角色后，且$[A1214]为出战角色时：</color>消耗1点<color=#FFFFFFFF>「夜魂值」</color>，使敌方出战角色附属<color=#FFFFFFFF>$[K1034]</color>。\\n$[K58]：$[S1121422]\\n所附属角色<color=#FFFFFFFF>「夜魂值」</color>为0时，弃置此牌；此牌被弃置时，所附属角色结束<color=#FFFFFFFF>$[C112141]</color>。",
@@ -4624,7 +4626,8 @@
             "count": 1
           }
         ],
-        "targetList": []
+        "targetList": [],
+        "keyMap": {}
       },
       {
         "id": 1161022,
@@ -4634,7 +4637,8 @@
         "rawDescription": "",
         "description": "",
         "playCost": [],
-        "targetList": []
+        "targetList": [],
+        "keyMap": {}
       },
       {
         "id": 1161023,
@@ -4644,7 +4648,8 @@
         "rawDescription": "",
         "description": "",
         "playCost": [],
-        "targetList": []
+        "targetList": [],
+        "keyMap": {}
       },
       {
         "id": 1161024,
@@ -4654,7 +4659,8 @@
         "rawDescription": "",
         "description": "",
         "playCost": [],
-        "targetList": []
+        "targetList": [],
+        "keyMap": {}
       }
     ],
     "rawDescription": "<color=#FFFFFFFF>附属角色切换至后台时：</color>消耗1点夜魂值，召唤<color=#FFFFFFFF>$[C116103]</color>。",
@@ -6335,7 +6341,8 @@
         "rawDescription": "",
         "description": "",
         "playCost": [],
-        "targetList": []
+        "targetList": [],
+        "keyMap": {}
       }
     ],
     "rawDescription": "<color=#FFFFFFFF>所附属角色受到伤害时：</color>如可能，失去1点充能，以抵消1点伤害，然后生成<color=#FFFFFFFF>$[C123032]</color>。（每回合至多2次）\\n$[K58]：$[S1230311]\\n<color=#FFFFFFFF>$[K3]：1</color>\\n（角色最多装备1个「{SPRITE_PRESET#3008}特技」）",
@@ -7468,7 +7475,8 @@
         "rawDescription": "",
         "description": "",
         "playCost": [],
-        "targetList": []
+        "targetList": [],
+        "keyMap": {}
       }
     ],
     "rawDescription": "$[K58]：$[S1270321]\\n<color=#FFFFFFFF>$[K3]：2</color>\\n（角色最多装备1个「{SPRITE_PRESET#3008}特技」）",
@@ -10406,7 +10414,8 @@
         "rawDescription": "",
         "description": "",
         "playCost": [],
-        "targetList": []
+        "targetList": [],
+        "keyMap": {}
       }
     ],
     "rawDescription": "$[K58]：$[S3130021]\\n<color=#FFFFFFFF>$[K3]：2</color>\\n（角色最多装备1个「{SPRITE_PRESET#3008}特技」）",
@@ -10461,7 +10470,8 @@
         "rawDescription": "",
         "description": "",
         "playCost": [],
-        "targetList": []
+        "targetList": [],
+        "keyMap": {}
       }
     ],
     "rawDescription": "$[K58]：$[S3130031]\\n<color=#FFFFFFFF>$[K3]：2</color>\\n（角色最多装备1个「{SPRITE_PRESET#3008}特技」）",
@@ -10589,7 +10599,8 @@
             "rawHintText": "对我方出战角色生效",
             "hintText": "对我方出战角色生效"
           }
-        ]
+        ],
+        "keyMap": {}
       },
       {
         "id": 3130062,
@@ -10608,7 +10619,8 @@
             "rawHintText": "对我方出战角色生效",
             "hintText": "对我方出战角色生效"
           }
-        ]
+        ],
+        "keyMap": {}
       },
       {
         "id": 3130063,
@@ -10668,7 +10680,8 @@
             "count": 1
           }
         ],
-        "targetList": []
+        "targetList": [],
+        "keyMap": {}
       },
       {
         "id": 3130072,
@@ -10678,7 +10691,8 @@
         "rawDescription": "附属角色切换至后台时，此牌可用次数+1。",
         "description": "附属角色切换至后台时，此牌可用次数+1。",
         "playCost": [],
-        "targetList": []
+        "targetList": [],
+        "keyMap": {}
       }
     ],
     "rawDescription": "<color=#FFFFFFFF>附属角色切换至后台时：</color>此牌$[K3]+1。\\n$[K58]：$[S3130071]\\n<color=#FFFFFFFF>$[K3]：2</color>\\n（角色最多装备1个「{SPRITE_PRESET#3008}特技」）",

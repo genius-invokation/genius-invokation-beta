@@ -143,7 +143,7 @@ export async function collateSkill(
   );
 
   const rawDescription = locale[skillObj.descTextMapHash] ?? "";
-  const keyMap = tcgSkillKeyMap[skillObj.skillJson];
+  const keyMap = tcgSkillKeyMap[skillObj.skillJson] ?? {};
   const descriptionReplaced = getDescriptionReplaced(
     rawDescription,
     locale,

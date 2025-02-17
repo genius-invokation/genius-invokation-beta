@@ -1671,3 +1671,16 @@ export const LittleTepetlisaurTreasureHunterAtLarge = card(332043)
   .drawCards(2, { who: "my" })
   .drawCards(2, { who: "opp" })
   .done();
+
+/**
+ * @id 332044
+ * @name 以极限之名
+ * @description
+ * 将双方所有元素骰转换为万能元素，然后交换双方手牌。
+ * 若双方手牌数量相同，则我方随机获得4个元素骰，每相差1张，少获得1个。
+ */
+export const InTheNameOfTheExtreme = card(332044)
+  .since("v5.4.51-beta")
+  .costSame(5)
+  // TODO
+  .done();
