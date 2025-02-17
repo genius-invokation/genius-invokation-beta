@@ -24,6 +24,7 @@ import {
   EventArg,
   type HealInfo,
   type InitiativeSkillEventArg,
+  SelectCardEventArg,
   type SkillInfo,
   type SkillResult,
   SwitchActiveEventArg,
@@ -493,6 +494,7 @@ export class SkillExecutor {
         );
         const events = await this.mutator.selectCard(arg.who, arg.via, arg.info);
         await this.handleEvent(...events);
+        await this.handleEvent(["onSelectCard", new SelectCardEventArg(this.state, arg.who, arg.info)])
       } else if (name === "requestUseSkill") {
         using l = this.mutator.subLog(
           DetailLogType.Event,

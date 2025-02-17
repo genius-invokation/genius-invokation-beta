@@ -1176,6 +1176,7 @@ export class SelectCardEventArg extends PlayerEventArg {
   constructor(
     state: GameState,
     who: 0 | 1,
+    public readonly selectInfo: SelectCardInfo
   ) {
     super(state, who);
   }
@@ -1213,6 +1214,7 @@ export const EVENT_MAP = {
   onGenerateDice: GenerateDiceEventArg,
   onConsumeNightsoul0: ConsumeNightsoulEventArg,
   onConsumeNightsoul1: ConsumeNightsoulEventArg,
+  onSelectCard: SelectCardEventArg,
 
   modifyDamage0: ModifyDamage0EventArg, // 类型
   modifyDamage1: ModifyDamage1EventArg, // 加
