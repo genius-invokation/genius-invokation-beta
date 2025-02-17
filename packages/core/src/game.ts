@@ -538,6 +538,7 @@ export class Game {
   }
 
   private async rollPhase() {
+    await this.handleEvent("onRoundBegin", new EventArg(this.state));
     using l = this.mutator.subLog(
       DetailLogType.Phase,
       `In roll phase (round ${this.state.roundNumber}):`,
