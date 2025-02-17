@@ -135,12 +135,6 @@ const SpiritOfOmenPyroScorpion = void 0; // moved to eremite_scorching_loremaste
  * （角色最多装备1个「特技」）
  * [1270321: 藤蔓锋鳞] (1*Same, 1*Energy) 造成1点草元素伤害。
  * [2270312: ] ()
- * @outdated
- * 特技：藤蔓锋鳞
- * 可用次数：2
- * （角色最多装备1个「特技」）
- * [1270321: 藤蔓锋鳞] (1*Void, 1*Energy) 造成1点草元素伤害。
- * [2270312: ] ()
  */
 const SpiritOfOmenDendroSpiritserpent = void 0; // moved to eremite_floral_ringdancer
 
@@ -289,11 +283,7 @@ export const Qucusaurus = card(313006)
  * [1161023: ] ()
  * [1161024: ] ()
  */
-export const TurboTwirly = card(116102)
-  .since("v5.4.51-beta")
-  .technique()
-  // TODO
-  .done();
+const TurboTwirly = void 0; /* moved to kachina */
 
 /**
  * @id 313007
@@ -310,5 +300,11 @@ export const Waverider = card(313007)
   .since("v5.4.51-beta")
   .costSame(5)
   .technique()
-  // TODO
+  .provideSkill(3130071)
+  .usage(2)
+  .costSame(1)
+  .damage(DamageType.Physical, 2)
+  .endProvide()
+  .on("switchActive", (c, e) => e.switchInfo.from.id === c.self.master().id)
+  .addVariable("usage", 1)
   .done();

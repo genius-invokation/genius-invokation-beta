@@ -1682,5 +1682,12 @@ export const LittleTepetlisaurTreasureHunterAtLarge = card(332043)
 export const InTheNameOfTheExtreme = card(332044)
   .since("v5.4.51-beta")
   .costSame(5)
-  // TODO
+  .do((c) => {
+    c.convertDice(DiceType.Omni, "all", "my");
+    c.convertDice(DiceType.Omni, "all", "opp");
+    const handDiff = Math.abs(c.player.hands.length - c.oppPlayer.hands.length);
+    const diceCount = Math.max(0, 4 - handDiff);
+    c.swapPlayerHandCards();
+    c.generateDice(DiceType.Omni, diceCount);
+  })
   .done();

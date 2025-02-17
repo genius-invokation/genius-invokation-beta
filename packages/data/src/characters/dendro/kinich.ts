@@ -134,8 +134,6 @@ export const CanopyHunterRidingHigh = skill(17092)
  * @name 向伟大圣龙致意
  * @description
  * 造成1点草元素伤害，召唤伟大圣龙阿乔。
- * @outdated
- * 造成1点草元素伤害，生成伟大圣龙阿乔。
  */
 export const HailToTheAlmightyDragonlord = skill(17093)
   .type("burst")

@@ -13,7 +13,21 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import { character, skill, summon, card, DamageType } from "@gi-tcg/core/builder";
+import { character, skill, summon, card, DamageType, Reaction } from "@gi-tcg/core/builder";
+import { BurningFlame } from "../../commons";
+
+/**
+ * @id 117102
+ * @name 柔灯之匣·二阶
+ * @description
+ * 结束阶段：造成2点草元素伤害。
+ * 可用次数：3（可叠加，最多叠加到6次）
+ */
+export const LumidouceCaseLevel2 = summon(117102)
+  .since("v5.4.51-beta")
+  .endPhaseDamage(DamageType.Dendro, 2)
+  .usageCanAppend(3, 6)
+  .done();
 
 /**
  * @id 117101
@@ -25,19 +39,11 @@ import { character, skill, summon, card, DamageType } from "@gi-tcg/core/builder
  */
 export const LumidouceCaseLevel1 = summon(117101)
   .since("v5.4.51-beta")
-  // TODO
-  .done();
-
-/**
- * @id 117102
- * @name 柔灯之匣·二阶
- * @description
- * 结束阶段：造成2点草元素伤害。
- * 可用次数：3（可叠加，最多叠加到6次）
- */
-export const LumidouceCaseLevel2 = summon(117102)
-  .since("v5.4.51-beta")
-  // TODO
+  .endPhaseDamage(DamageType.Dendro, 1)
+  .usageCanAppend(3, 6)
+  .on("dealDamage", (c, e) => e.getReaction() === Reaction.Burning)
+  .listenToPlayer()
+  .transformDefinition("@self", LumidouceCaseLevel2)
   .done();
 
 /**
@@ -49,7 +55,8 @@ export const LumidouceCaseLevel2 = summon(117102)
  */
 export const LumidouceCaseLevel3 = summon(117103)
   .since("v5.4.51-beta")
-  // TODO
+  .endPhaseDamage(DamageType.Dendro, 1, "all opp characters")
+  .usage(1)
   .done();
 
 /**
@@ -62,7 +69,7 @@ export const ShadowhuntingSpearCustom = skill(17101)
   .type("normal")
   .costDendro(1)
   .costVoid(2)
-  // TODO
+  .damage(DamageType.Physical, 2)
   .done();
 
 /**
@@ -74,7 +81,10 @@ export const ShadowhuntingSpearCustom = skill(17101)
 export const FragranceExtraction = skill(17102)
   .type("elemental")
   .costDendro(3)
-  // TODO
+  .if((c) => c.$(`my summons with definition id ${LumidouceCaseLevel2}`))
+  .summon(LumidouceCaseLevel2)
+  .else()
+  .summon(LumidouceCaseLevel1)
   .done();
 
 /**
@@ -87,7 +97,12 @@ export const AromaticExplication = skill(17103)
   .type("burst")
   .costDendro(3)
   .costEnergy(2)
-  // TODO
+  .damage(DamageType.Dendro, 1)
+  .dispose(`
+    my summons with definition id ${LumidouceCaseLevel1} or 
+    my summons with definition id ${LumidouceCaseLevel2} or
+    my summons with definition id ${LumidouceCaseLevel3}`)
+  .summon(LumidouceCaseLevel3)
   .done();
 
 /**
@@ -98,7 +113,15 @@ export const AromaticExplication = skill(17103)
  */
 export const LingeringFragrance01 = skill(17104)
   .type("passive")
-  // TODO
+  .on("dealDamage", (c, e) => e.getReaction() === Reaction.Burning)
+  .listenToPlayer()
+  .usagePerRound(1, { name: "usagePerRound1" })
+  .do((c) => {
+    const burning = c.$(`my summons with definition id ${BurningFlame}`);
+    if (burning) {
+      c.triggerEndPhaseSkill(burning.state);
+    }
+  })
   .done();
 
 /**
@@ -108,9 +131,7 @@ export const LingeringFragrance01 = skill(17104)
  * 我方造成燃烧反应伤害后：触发1次我方燃烧烈焰的回合结束效果。（每回合1次）
  */
 export const LingeringFragrance02 = skill(17105)
-  .type("passive")
-  // TODO
-  .done();
+  .reserve();
 
 /**
  * @id 1710
@@ -123,7 +144,7 @@ export const Emilie = character(1710)
   .tags("dendro", "pole", "fontaine", "ousia")
   .health(10)
   .energy(2)
-  .skills(ShadowhuntingSpearCustom, FragranceExtraction, AromaticExplication, LingeringFragrance01, LingeringFragrance02)
+  .skills(ShadowhuntingSpearCustom, FragranceExtraction, AromaticExplication, LingeringFragrance01)
   .done();
 
 /**
@@ -138,6 +159,17 @@ export const Emilie = character(1710)
 export const MarcotteSillage = card(217101)
   .since("v5.4.51-beta")
   .costDendro(1)
-  .talent(Emilie)
-  // TODO
+  .talent(Emilie, "action")
+  .on("modifySkillDamageType", (c, e) => e.type === DamageType.Physical)
+  .changeDamageType(DamageType.Dendro)
+  .on("useSkill", (c, e) => e.isSkillType("normal"))
+  .do((c) => {
+    const lumidouce = c.$(`
+      my summons with definition id ${LumidouceCaseLevel1} or
+      my summons with definition id ${LumidouceCaseLevel2} or 
+      my summons with definition id ${LumidouceCaseLevel3}`);
+    if (lumidouce) {
+      c.triggerEndPhaseSkill(lumidouce.state);
+    }
+  })
   .done();

@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import { character, skill, summon, status, combatStatus, card, DamageType } from "@gi-tcg/core/builder";
+import { character, skill, summon, status, combatStatus, card, DamageType, CombatStatusHandle, EquipmentHandle } from "@gi-tcg/core/builder";
 
 /**
  * @id 116103
@@ -23,7 +23,11 @@ import { character, skill, summon, status, combatStatus, card, DamageType } from
  */
 export const TurboTwirlyLetItRip = summon(116103)
   .since("v5.4.51-beta")
-  // TODO
+  .endPhaseDamage(DamageType.Geo, 1)
+  .usage(1)
+  .damage(DamageType.Piercing, 1, "opp next")
+  .if((c) => c.$(`my equipment with definition id ${NightRealmsGiftHeartOfUnity}`))
+  .drawCards(1)
   .done();
 
 /**
@@ -34,7 +38,7 @@ export const TurboTwirlyLetItRip = summon(116103)
  */
 export const NightsoulsBlessing = status(116104)
   .since("v5.4.51-beta")
-  // TODO
+  .nightsoulsBlessing(2)
   .done();
 
 /**
@@ -49,7 +53,20 @@ export const NightsoulsBlessing = status(116104)
  */
 export const TurboTwirly = card(116102)
   .since("v5.4.51-beta")
-  // TODO
+  .unobtainable()
+  .nightsoulTechnique()
+  .on("switchActive", (c, e) => e.switchInfo.from.id === c.self.master().id)
+  .consumeNightsoul("@master")
+  .summon(TurboTwirlyLetItRip)
+  .endOn()
+  .provideSkill(1161021)
+  .costSame(1)
+  .consumeNightsoul("@master")
+  .if((c) => c.$(`my combat status with definition id ${TurboDrillField}`))
+  .damage(DamageType.Piercing, 2, "opp next")
+  .else()
+  .damage(DamageType.Piercing, 1, "opp next")
+  .damage(DamageType.Geo, 2)
   .done();
 
 /**
@@ -59,9 +76,11 @@ export const TurboTwirly = card(116102)
  * 我方冲天转转造成的岩元素伤害+1，造成的穿透伤害+1。
  * 可用次数：2
  */
-export const TurboDrillField = combatStatus(116101)
+export const TurboDrillField: CombatStatusHandle = combatStatus(116101)
   .since("v5.4.51-beta")
-  // TODO
+  .on("increaseDamage", (c, e) => e.source.definition.id === TurboTwirly && e.type === DamageType.Geo)
+  .usage(2)
+  .increaseDamage(1)
   .done();
 
 /**
@@ -74,7 +93,7 @@ export const Cragbiter = skill(16101)
   .type("normal")
   .costGeo(1)
   .costVoid(2)
-  // TODO
+  .damage(DamageType.Physical, 2)
   .done();
 
 /**
@@ -86,7 +105,15 @@ export const Cragbiter = skill(16101)
 export const GoGoTurboTwirly = skill(16102)
   .type("elemental")
   .costGeo(2)
-  // TODO
+  .filter((c) => !c.self.hasStatus(NightsoulsBlessing))
+  .do((c) => {
+    c.self.equip(TurboTwirly);
+    c.characterStatus(NightsoulsBlessing, "@self", {
+      overrideVariables: {
+        nightsoul: 2
+      }
+    });
+  })
   .done();
 
 /**
@@ -99,7 +126,8 @@ export const TimeToGetSerious = skill(16103)
   .type("burst")
   .costGeo(3)
   .costEnergy(2)
-  // TODO
+  .damage(DamageType.Geo, 3)
+  .combatStatus(TurboDrillField)
   .done();
 
 /**
@@ -123,9 +151,10 @@ export const Kachina = character(1610)
  * 我方冲天转转或冲天转转·脱离触发效果后，抓1张牌。
  * （牌组中包含卡齐娜，才能加入牌组）
  */
-export const NightRealmsGiftHeartOfUnity = card(216101)
+export const NightRealmsGiftHeartOfUnity: EquipmentHandle = card(216101)
   .since("v5.4.51-beta")
   .costGeo(1)
   .talent(Kachina)
-  // TODO
+  .on("useSkill", (c, e) => e.skill.definition.id === TurboTwirly)
+  .drawCards(1)
   .done();
