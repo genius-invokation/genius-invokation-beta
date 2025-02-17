@@ -1732,12 +1732,11 @@ export class SkillContext<Meta extends ContextMetaBase> {
       cards: this.getCardsDefinition(cards),
     });
   }
-  selectAndPlay(cards: (CardHandle | CardDefinition)[], targets: CharacterTargetArg | EntityTargetArg) {
-    const targetStates = this.queryOrOf(targets).map((t) => t.state);
+  selectAndPlay(cards: (CardHandle | CardDefinition)[], ...targets: (CharacterState | EntityState)[]) {
     this.emitEvent("requestSelectCard", this.skillInfo, this.callerArea.who, {
       type: "requestPlayCard",
       cards: this.getCardsDefinition(cards),
-      targets: targetStates
+      targets
     });
   }
 
