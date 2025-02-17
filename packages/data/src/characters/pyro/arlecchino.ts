@@ -119,7 +119,7 @@ export const TheBalemoonAloneMayKnowPassive02 = skill(13146)
  * @id 13147
  * @name 唯厄月可知晓
  * @description
- * 角色不会受到S13143以外的治疗。
+ * 角色不会受到厄月将升以外的治疗。
  * 自身附属生命之契时：角色造成的物理伤害变为火元素伤害。
  */
 export const TheBalemoonAloneMayKnowPassive03 = skill(13147)
