@@ -58,7 +58,11 @@ import { EntityBuilder, type EntityBuilderPublic } from "./entity";
 import type { GuessedTypeOfQuery } from "../query/types";
 import { GiTcgDataError } from "../error";
 import { costSize, diceCostSize, normalizeCost, type Writable } from "../utils";
-import { type Version, type VersionInfo, DEFAULT_VERSION_INFO } from "../base/version";
+import {
+  type Version,
+  type VersionInfo,
+  DEFAULT_VERSION_INFO,
+} from "../base/version";
 
 type DisposeCardBuilderMeta<AssociatedExt extends ExtensionHandle> = {
   callerType: "character";
@@ -178,8 +182,9 @@ export class CardBuilder<
       .addTarget(target)
       .do((c) => {
         const ch = c.$("character and @targets.0");
+        const caller = c.skillInfo.caller;
         ch?.equip(cardId, {
-          withId: c.skillInfo.caller.id,
+          withId: caller.definition.type === "card" ? caller.id : void 0,
         });
       })
       .done();
@@ -231,8 +236,12 @@ export class CardBuilder<
       if (targets.length > 0 && c.$(`my support with id ${targets[0].id}`)) {
         c.dispose(targets[0]);
       }
+      const caller = c.skillInfo.caller;
       c.createEntity("support", cardId, void 0, {
-        withId: c.skillInfo.caller.id,
+        // 当从手牌打出支援牌时，使用原本的手牌 id
+        // （并非从手牌打出的情况：selectAndPlay 直接在挑选后调用）
+        withId:
+          caller.definition.type === "card" ? c.skillInfo.caller.id : void 0,
       });
     }).done();
     const builder = new EntityBuilder<"support", never, never, false, {}>(

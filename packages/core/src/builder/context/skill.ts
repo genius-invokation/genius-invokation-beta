@@ -340,12 +340,10 @@ export class SkillContext<Meta extends ContextMetaBase> {
       ({ caller, skill }) => ({
         caller,
         definition: skill,
-        fromCard: null,
         requestBy: null,
         charged: false,
         plunging: false,
         isPreview: this.skillInfo.isPreview,
-        isSelfDispose: false,
       }),
     );
     for (const info of infos) {
