@@ -410,7 +410,9 @@ const detailedEventDictionary = {
   }),
   playCard: defineDescriptor("onPlayCard", (c, e, r) => {
     return (
-      // c.self.id !== e.card.id &&  // 支援牌不触发自身——有例外，移到具体卡牌代码中
+      // 大部分支援牌不触发自身的打出时；
+      // 但有例外“特佩利舞台”，故将此判断移到具体卡牌代码中
+      // c.self.id !== e.card.id &&  
       checkRelative(e.onTimeState, { who: e.who }, r)
     );
   }),
