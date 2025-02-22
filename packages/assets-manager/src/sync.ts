@@ -49,7 +49,9 @@ export async function prepareForSync(
   // Data
   allData.clear();
   for (const d of data) {
-    allData.set(d.id, d);
+    if (!allData.has(d.id)) {
+      allData.set(d.id, d);
+    }
   }
 
   // Images
