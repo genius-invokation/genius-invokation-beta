@@ -49,7 +49,7 @@ export function PlayerInfo(props: PlayerInfoProps) {
       <div class="flex-grow-1" />
       <div class="flex flex-row gap-4 items-center">
         <div
-          class="ml-1.75 h-6 w-6 b-gray-400 b-2 rounded-md rotate-45 bg-gradient-to-r from-purple-500 to-blue-500 data-[used]:bg-gray-300"
+          class="ml-1.75 h-6 w-6 b-gray-400 b-2 rounded-md rotate-45 bg-gradient-to-r from-purple-500 to-blue-500 data-[used]:bg-gray-300 data-[used]:bg-none"
           bool:data-used={props.legendUsed}
         />
         <div
