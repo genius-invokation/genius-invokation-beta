@@ -235,10 +235,12 @@ export function createClient(who: 0 | 1, option: ClientOption = {}): Client {
       }
       case "actionCommitted": {
         actionResolvers.action?.resolve(result);
+        setActionState(null);
         break;
       }
       case "chooseActiveCommitted": {
         actionResolvers.chooseActive?.resolve(result);
+        setActionState(null);
         break;
       }
     }

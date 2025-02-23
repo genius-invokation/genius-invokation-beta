@@ -1079,6 +1079,7 @@ export function Chessboard(props: ChessboardProps) {
           setDicePanelState(actionState.dicePanel);
         } else if (prevActionState) {
           // 退出行动时，取消所有的选择项
+          setDraggingHand(null);
           setSelectingItem(null);
           setDicePanelState("hidden");
           setSelectedDice([]);
